@@ -1,5 +1,8 @@
 # DEVOLOPMENT DOCUMENTATION
+## THOUGHTS
+I've been developing different systems for a game. I first started with scuffed movements since I knew nothing about game architecture. I later found out what state machines were and got into that. It was a headache but I got it running and developed a lot of features, however, it soon became very hard to maintain since a lot of the logic and important variables got eventually spread out through different states and it got very messy. This is why I decided to rebuild the state machine. However, after rebuilding the state machine and a few state I once again changed my mind and went the modular road.
 
+This is a lot simpler but yet again i've realized that I might be stupid and stacked everything into states when developing the state machine. I could have divided the functionalites a lot better than I did. State machines are in fact a lot better when it comes to movement, so I decided that I would create state machines for the enemies and keep the simple components for the player movements as long as I can. I just know this is a huge mistake but fuck it we ball.
 # PLAYER MOVEMENT
 ## Modular Components 
 This game handles player movement with modular components. The `Player` class functions as a middleman for each component. This class calls the engines physics functions every frame, which lets every component communicate and handle their respective input. Separating the functionallity in this manner improves the projects scaleability and code readability.
@@ -46,3 +49,12 @@ body.set_collision_layer_value(INVINCIBLE_LAYER, true)
 body.set_collision_mask_value(ENEMY_LAYER, false)
 ```
 Then the invers is done to end the invincibility window.
+
+## 6. AnimationComponent
+For this component to work you need to add the `AnimationPlayer`- and `Sprite2D`-node into the exported variables.
+This component plays animations and handles character flips.
+
+**NOTE**<br>
+This whole function could be improved by using the actual booleans to check if the player is on the ground or what not, instead of manually checking if player.is_on_floor. I could add `is_moving` variable to movement component and use that instead of input. However this kind of thinking is taking me back to a state machine GHAAAAAA (I wanted to avoid this)
+
+
