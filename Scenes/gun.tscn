@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://6bh1bi4427fw"]
+
+[ext_resource type="Texture2D" uid="uid://byrtmp8eiivjq" path="res://Assets/Player/gun.png" id="1_nxj5y"]
+[ext_resource type="Script" uid="uid://t8k1hctr5cwu" path="res://Player/Scripts/gun.gd" id="1_oqrbh"]
+
+[node name="Gun" type="Node2D" unique_id=1641854389]
+position = Vector2(-4.7683716e-07, -1.9073486e-06)
+scale = Vector2(0.06, 0.06)
+script = ExtResource("1_oqrbh")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=496898012]
+position = Vector2(116, -72)
+texture = ExtResource("1_nxj5y")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=2116355707]
+position = Vector2(266.6667, -133.33331)
+
+[node name="shoot_timer" type="Timer" parent="." unique_id=2046220286]
+wait_time = 0.3
+one_shot = true
+
+[node name="charge_timer" type="Timer" parent="." unique_id=2112695978]
+wait_time = 4.0
+one_shot = true
