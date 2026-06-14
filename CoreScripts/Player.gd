@@ -2,8 +2,11 @@ class_name Player extends CharacterBody2D
 
 @onready var player_animation: AnimationPlayer = $AnimationPlayer
 
-@onready var sprite: Sprite2D = $PlayerSprite
-@onready var state_machine: PlayerStateMachine = $StateMachine
+##maybe should have a _ready function to initalize the components.
+#this way the components dont need to be passed to each component and instead reached through player?
+func _physics_process(delta: float) -> void:
+	input_component.update_input()
+	update_facing_direction(input_component.input_horizontal)
 
 
 var direction: Vector2 = Vector2.ZERO
