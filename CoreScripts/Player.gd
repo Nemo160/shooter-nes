@@ -1,18 +1,27 @@
 class_name Player extends CharacterBody2D
 
-@onready var player_animation: AnimationPlayer = $AnimationPlayer
+@export_subgroup("Nodes")
+@export var gravity_component: GravityComponent
+@export var input_component: InputComponent
+@export var movement_component: MovementComponent
+@export var animation_component: AnimationComponent
+@export var jump_component: JumpComponent
+@export var dash_component: DashComponent
+var facing_direction: float = 1.0
 
-@onready var sprite: Sprite2D = $PlayerSprite
-@onready var state_machine: PlayerStateMachine = $StateMachine
+func _physics_process(delta: float) -> void:
+	input_component.update_input()
+	update_facing_direction(input_component.input_horizontal)
 
+	
+	gravity_component.handle_gravity(self, delta, input_component.holding_down)
+	movement_component.handle_horizontal_movement(self, input_component.input_horizontal)
+	jump_component.handle_jump(self, input_component.jump_pressed)
+	dash_component.handle_dash(self, input_component.dash_pressed, delta)
 
-var direction: Vector2 = Vector2.ZERO
-var move_speed: float = 200
-var health: float = 100.0
+	move_and_slide()
+	animation_component.update_animation(self, input_component.input_horizontal)
 
-func _ready() -> void:
-	state_machine.init(self)
-
-
-func update_animation(animation_name: String) -> void:
-	player_animation.play(animation_name)
+func update_facing_direction(input_horizontal: float) -> void:
+	if input_horizontal != 0:
+		facing_direction = sign(input_horizontal)

@@ -141,7 +141,7 @@ position_smoothing_enabled = true
 [node name="Gun" parent="." unique_id=1641854389 instance=ExtResource("9_f1ek2")]
 position = Vector2(4.7683716e-07, 2.3841858e-07)
 
-[node name="dash_cooldown" type="Timer" parent="." unique_id=1648404323]
+[node name="dash_timer" type="Timer" parent="." unique_id=1648404323]
 wait_time = 1.5
 one_shot = true
 
@@ -157,5 +157,6 @@ animation_player = NodePath("../AnimationPlayer")
 
 [node name="JumpComponent" parent="." unique_id=1611053512 instance=ExtResource("8_8erm5")]
 
-[node name="DashComponent" parent="." unique_id=220756344 instance=ExtResource("9_3p78x")]
+[node name="DashComponent" parent="." unique_id=220756344 node_paths=PackedStringArray("dash_timer") instance=ExtResource("9_3p78x")]
 dash_duration = 0.18
+dash_timer = NodePath("../dash_timer")

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dabfpehdklroo"]
+
+[ext_resource type="Script" uid="uid://ckd3fv0pdobjw" path="res://Player/Components/Scripts/DashComponent.gd" id="1_0685t"]
+
+[node name="DashComponent" type="Node" unique_id=220756344]
+script = ExtResource("1_0685t")
+dash_duration = null

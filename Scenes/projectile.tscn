@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://coydtqoxx10jh"]
 
 [ext_resource type="Texture2D" uid="uid://bw56hqfjjhrtm" path="res://Assets/Player/bullet.png" id="1_f8cdk"]
-[ext_resource type="Script" uid="uid://b3hclyi3kfo3y" path="res://Player/Scripts/projectile.gd" id="1_yr2qt"]
+[ext_resource type="Script" uid="uid://b3hclyi3kfo3y" path="res://Player/Items/projectile.gd" id="1_yr2qt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tl4hk"]
 radius = 2.0
