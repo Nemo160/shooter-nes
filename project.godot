@@ -99,6 +99,7 @@ charge_attack={
 [layer_names]
 
 2d_physics/layer_1="Player"
+2d_physics/layer_2="Invincible_Frame"
 2d_physics/layer_8="BulletLayer"
 2d_physics/layer_9="platform"
 2d_physics/layer_10="Enemy"
