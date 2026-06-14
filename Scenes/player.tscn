@@ -1,22 +1,24 @@
 [gd_scene format=3 uid="uid://bfj8cdojk16u"]
 
+[ext_resource type="Script" uid="uid://p4opleavvq5c" path="res://Scenes/playerNew.gd" id="1_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://boufkgqabgybd" path="res://Assets/Player/block_character_test.png" id="1_v0iea"]
-[ext_resource type="Script" uid="uid://c0vk6dyxt4bw5" path="res://Player/Scripts/PlayerCharacter.gd" id="1_vgqql"]
-[ext_resource type="Script" uid="uid://dmqxkwoo088cq" path="res://CoreScripts/PlayerStateMachine.gd" id="3_vgqql"]
+[ext_resource type="Script" uid="uid://b4elnknntakxa" path="res://CoreScripts/StateMachine.gd" id="3_tx1dd"]
 [ext_resource type="Script" uid="uid://b8jw831lnvajl" path="res://Player/Scripts/States/State_Attack.gd" id="4_8erm5"]
-[ext_resource type="Script" uid="uid://bap6lnye5o2d8" path="res://Player/Scripts/States/State_Idle.gd" id="4_fkybt"]
 [ext_resource type="Script" uid="uid://bh5dr28k17yh6" path="res://Player/Scripts/States/State_Walk.gd" id="4_x3wgy"]
 [ext_resource type="Script" uid="uid://by0ngw1bam5di" path="res://Player/Scripts/States/State_Jump.gd" id="5_3smsa"]
+[ext_resource type="Script" uid="uid://bf4ra4vor72af" path="res://Player/Scripts/States/idle_state.gd" id="5_tx1dd"]
 [ext_resource type="Script" uid="uid://e6bj3cnqw6yp" path="res://Player/Scripts/States/State_Fall.gd" id="6_x3wgy"]
 [ext_resource type="PackedScene" uid="uid://6bh1bi4427fw" path="res://Scenes/gun.tscn" id="9_f1ek2"]
 [ext_resource type="Script" uid="uid://caf6yuupbqp5i" path="res://Player/Scripts/States/State_Dash.gd" id="9_tx1dd"]
+[ext_resource type="Script" uid="uid://bd3416pcc3hqp" path="res://Player/Scripts/GravityComponent.gd" id="11_gymyn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fkybt"]
 size = Vector2(18, 22)
 
-[node name="Player" type="CharacterBody2D" unique_id=2016997597]
+[node name="Player" type="CharacterBody2D" unique_id=2016997597 node_paths=PackedStringArray("gravity_component")]
 collision_mask = 768
-script = ExtResource("1_vgqql")
+script = ExtResource("1_tx1dd")
+gravity_component = NodePath("GravityComponent")
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=225341852]
 texture = ExtResource("1_v0iea")
@@ -31,17 +33,20 @@ debug_color = Color(0.9372549, 0.09411765, 0, 0.41960785)
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 
-[node name="StateMachine" type="Node" parent="." unique_id=1355538793]
-script = ExtResource("3_vgqql")
+[node name="StateMachine" type="Node" parent="." unique_id=1355538793 node_paths=PackedStringArray("inital_state")]
+script = ExtResource("3_tx1dd")
+inital_state = NodePath("idle")
 
 [node name="fall" type="Node" parent="StateMachine" unique_id=1128998280]
 script = ExtResource("6_x3wgy")
 
-[node name="idle" type="Node" parent="StateMachine" unique_id=1959799249]
-script = ExtResource("4_fkybt")
+[node name="idle" type="Node" parent="StateMachine" unique_id=1959799249 node_paths=PackedStringArray("move_state")]
+script = ExtResource("5_tx1dd")
+move_state = NodePath("../walk")
 
-[node name="walk" type="Node" parent="StateMachine" unique_id=1795523264]
+[node name="walk" type="Node" parent="StateMachine" unique_id=1795523264 node_paths=PackedStringArray("idle_state")]
 script = ExtResource("4_x3wgy")
+idle_state = NodePath("../idle")
 
 [node name="jump" type="Node" parent="StateMachine" unique_id=950160423]
 script = ExtResource("5_3smsa")
@@ -62,3 +67,6 @@ position = Vector2(4.7683716e-07, 2.3841858e-07)
 [node name="dash_timer" type="Timer" parent="." unique_id=1648404323]
 wait_time = 1.5
 one_shot = true
+
+[node name="GravityComponent" type="Node" parent="." unique_id=1885483300]
+script = ExtResource("11_gymyn")
