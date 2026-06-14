@@ -16,7 +16,7 @@ const INVINCIBLE_LAYER: int = 2
 const ENEMY_LAYER: int = 10
 
 func _ready() -> void:
-	cooldown_timer.one_shot = true	
+	cooldown_timer.one_shot = true
 
 
 func handle_dash(body: CharacterBody2D, wants_to_dash: bool, delta: float) -> void:

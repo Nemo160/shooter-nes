@@ -17,6 +17,7 @@ const BULLET = preload("res://Scenes/projectile.tscn")
 
 func _physics_process(delta: float) -> void:
 	look_at(get_global_mouse_position())
+	
 
 	if Input.is_action_pressed("attack") and shoot_timer.is_stopped():
 		
