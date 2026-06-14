@@ -6,8 +6,8 @@ class_name DashComponent extends Node
 
 @onready var cooldown_timer: Timer = $"../dash_cooldown"
 
-
 var is_dashing: bool = false
+var dash_is_on_cooldown: bool = false
 var dash_direction: float = 1.0
 var dash_time_left: float = 0.0
 
@@ -17,7 +17,6 @@ const ENEMY_LAYER: int = 10
 
 func _ready() -> void:
 	cooldown_timer.one_shot = true
-
 
 func handle_dash(body: CharacterBody2D, wants_to_dash: bool, delta: float) -> void:
 	if is_dashing:
@@ -29,9 +28,7 @@ func handle_dash(body: CharacterBody2D, wants_to_dash: bool, delta: float) -> vo
 		if dash_time_left <= 0:
 			is_dashing = false
 			end_invincibility(body)
-
 			cooldown_timer.start()
-			
 		return
 
 	if wants_to_dash and cooldown_timer.is_stopped():
@@ -40,14 +37,18 @@ func handle_dash(body: CharacterBody2D, wants_to_dash: bool, delta: float) -> vo
 func start_dash(body: CharacterBody2D) -> void:
 	is_dashing = true
 	start_invincibility(body)
-
 	dash_time_left = dash_duration
+
 	if body is Player:
 		dash_direction = body.facing_direction
 	else:
 		dash_direction = 1.0
 		
-		
+func get_cooldown_progress() -> float:
+	if cooldown_timer.is_stopped():
+		return 1.0
+	return 1.0 - (cooldown_timer.time_left / cooldown_timer.wait_time)
+	
 func start_invincibility(body: CharacterBody2D) -> void:
 	body.set_collision_layer_value(PLAYER_LAYER, false)
 	body.set_collision_layer_value(INVINCIBLE_LAYER, true)
