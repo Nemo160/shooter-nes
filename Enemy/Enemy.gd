@@ -1,27 +1,28 @@
 class_name Enemy extends CharacterBody2D
 
 
-var health:float
-var move_speed: float = 200
-var direction: Vector2 = Vector2.ZERO
-var gravity: float = GameConstant.GRAVITY
-var damage: float = 25
+@export_subgroup("Components")
+@export var gravity_component: GravityComponent
+@export var movement_component: MovementComponent
+@export var animation_component: AnimationComponent
 
-var is_alive: bool = true
+@export_subgroup("Settings")
+@export var move_speed: float = 80.0
+@export var health: float = 100
+
+var player: Node2D
 
 
 func _ready() -> void:
-	direction.y = 0
-	pass # Replace with function body.
+	player = get_tree().get_first_node_in_group("player")
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func take_damage(damage: float) -> void:
-	health -= damage
-	_set_health(health)
+func can_see_player() -> bool:
+	return player != null
+
+
+func is_in_attack_range() -> bool:
+	if player == null:
+		return false
 	
-func die() -> void:
-	queue_free()
-	
-func _set_health(value: float) -> void:
-	health = value
+	return global_position.distance_to(player.global_position) < 35.0

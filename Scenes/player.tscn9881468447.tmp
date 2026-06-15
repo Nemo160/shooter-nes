@@ -151,7 +151,6 @@ one_shot = true
 [node name="PlayerGravityComponent" parent="." unique_id=744426821 instance=ExtResource("7_8erm5")]
 
 [node name="PlayerMovementComponent" parent="." unique_id=661814169 instance=ExtResource("12_pu2lt")]
-speed = null
 
 [node name="PlayerInputComponent" parent="." unique_id=545915773 instance=ExtResource("13_ukyrk")]
 

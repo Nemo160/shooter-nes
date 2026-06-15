@@ -1,4 +1,4 @@
-class_name JumpComponent extends Node
+class_name PlayerJumpComponent extends JumpComponent
 
 @export_subgroup("Settings")
 @export var jump_velocity: float = -350.0
