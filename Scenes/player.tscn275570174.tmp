@@ -160,9 +160,8 @@ animation_player = NodePath("../AnimationPlayer")
 
 [node name="JumpComponent" parent="." unique_id=1611053512 instance=ExtResource("8_8erm5")]
 
-[node name="DashComponent" parent="." unique_id=220756344 node_paths=PackedStringArray("dash_bar") instance=ExtResource("9_3p78x")]
-dash_duration = 0.18
-dash_bar = NodePath("../Dashbar")
+[node name="DashComponent" parent="." unique_id=220756344 instance=ExtResource("9_3p78x")]
+dash_speed = null
 
 [node name="Dashbar" parent="." unique_id=341123911 instance=ExtResource("10_tx1dd")]
 anchors_preset = 5
