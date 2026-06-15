@@ -13,7 +13,7 @@ Every component variable is exported to the inspector with the name "Nodes"
 Every component connect through Player, however, I've come to realize that this also means that every component has access to an instance of each component through player. This basically means that you can call GravityComponent variables and functions in JumpComponent. This works because the Player instance is passed to every component. **DO NOT** use this! I assume that the instance that is used when accessing variables this way could be outdated or even worse it could lead to a recursive black hole if not careful.
 ## Class Diagram
 
-![Class Diagram](Docs/Class diagram.png)
+![Class Diagram](Docs/class-diagram.png)
 ## Components
 ### 1. InputComponent
 This component handles the user inputs with a single function `update_input()` by setting the corresponding boolean to either true or false depening if their respective key has been pressed.
