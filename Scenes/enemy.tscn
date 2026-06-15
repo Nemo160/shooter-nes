@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://be3yj3j3ud6gw" path="res://Enemy/Goblin_Enemy.gd" id="1_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://cf2ekfdsnt8t3" path="res://Assets/Enemy/goblin.png" id="1_hghv2"]
-[ext_resource type="PackedScene" uid="uid://dtbredpbyinhi" path="res://Components/healthbar.tscn" id="3_afpow"]
+[ext_resource type="PackedScene" uid="uid://dtbredpbyinhi" path="res://Components/Progressbars/healthbar.tscn" id="3_afpow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(20, 31)
