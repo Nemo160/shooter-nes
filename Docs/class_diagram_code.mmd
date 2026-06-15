@@ -1,0 +1,36 @@
+classDiagram
+
+    CharacterBody2D <|-- Player
+    CharacterBody2D <|-- Enemy
+    Enemy <|-- Goblin
+
+    GravityComponent <|-- PlayerGravityComponent
+    GravityComponent <|-- EnemyGravityComponent
+
+    AnimationComponent <|-- PlayerAnimationComponent
+    AnimationComponent <|-- EnemyAnimationComponent
+
+    MovementComponent <|-- PlayerMovementComponent
+    MovementComponent <|-- EnemyMovementComponent
+
+    State <|-- EnemyState
+
+    EnemyState <|-- GoblinIdleState
+    EnemyState <|-- GoblinPatrolState
+    EnemyState <|-- GoblinChaseState
+    EnemyState <|-- GoblinAttackState
+
+    Player --> PlayerGravityComponent
+    Player --> PlayerAnimationComponent
+    Player --> PlayerMovementComponent
+    Player --> PlayerDashComponent
+    Player --> PlayerInputComponent
+    Player --> PlayerJumpComponent
+
+    Goblin --> EnemyGravityComponent
+    Goblin --> EnemyAnimationComponent
+    Goblin --> EnemyMovementComponent
+    Goblin --> StateMachine
+
+    StateMachine --> State
+    EnemyState --> Enemy
