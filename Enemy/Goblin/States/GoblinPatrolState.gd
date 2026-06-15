@@ -9,6 +9,7 @@ func enter_state() -> void:
 	enemy.animation_component.play_walk()
 
 func update(delta: float) -> void:
+	#animation or visual here
 	pass
 
 func physics_update(delta: float) -> void:

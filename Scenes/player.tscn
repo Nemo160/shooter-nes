@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ftui33xfe2p6" path="res://Player/Components/jump_component.tscn" id="8_8erm5"]
 [ext_resource type="PackedScene" uid="uid://dabfpehdklroo" path="res://Player/Components/dash_component.tscn" id="9_3p78x"]
 [ext_resource type="PackedScene" uid="uid://6bh1bi4427fw" path="res://Scenes/gun.tscn" id="9_f1ek2"]
+[ext_resource type="Script" uid="uid://cevkq0i26nx20" path="res://Core/Components/HealthComponent.gd" id="10_gymyn"]
 [ext_resource type="PackedScene" uid="uid://dtbredpbyinhi" path="res://Components/Progressbars/healthbar.tscn" id="11_gymyn"]
 [ext_resource type="PackedScene" uid="uid://bwduqgcbpijgv" path="res://Player/Components/movement_component.tscn" id="12_pu2lt"]
 [ext_resource type="PackedScene" uid="uid://cdvv6hnx0raox" path="res://Player/Components/input_components.tscn" id="13_ukyrk"]
@@ -114,6 +115,9 @@ _data = {
 &"walk": SubResource("Animation_8erm5")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pu2lt"]
+bg_color = Color(7.6046585e-06, 0.9822237, 0.5866627, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tx1dd"]
 bg_color = Color(0.92941177, 1, 0.6431373, 0.44705883)
 shadow_color = Color(0.024303863, 0.023372423, 0, 0.6)
@@ -122,16 +126,19 @@ shadow_size = 1
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gymyn"]
 bg_color = Color(0.8862745, 0.8666667, 0.15686275, 1)
 
-[node name="Player" type="CharacterBody2D" unique_id=2016997597 node_paths=PackedStringArray("gravity_component", "input_component", "movement_component", "animation_component", "jump_component", "dash_component")]
+[node name="Player" type="CharacterBody2D" unique_id=2016997597 node_paths=PackedStringArray("health_component", "gravity_component", "input_component", "movement_component", "animation_component", "jump_component", "dash_component", "dash_bar", "damage_cooldown_timer")]
 z_index = 2
 collision_mask = 768
 script = ExtResource("1_tx1dd")
+health_component = NodePath("PlayerHealthComponent")
 gravity_component = NodePath("PlayerGravityComponent")
 input_component = NodePath("PlayerInputComponent")
 movement_component = NodePath("PlayerMovementComponent")
 animation_component = NodePath("PlayerAnimationComponent")
 jump_component = NodePath("PlayerJumpComponent")
 dash_component = NodePath("PlayerDashComponent")
+dash_bar = NodePath("Dashbar")
+damage_cooldown_timer = NodePath("hurt_cooldown_timer")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=225341852]
 texture = ExtResource("1_v0iea")
@@ -165,11 +172,16 @@ position = Vector2(4.7683716e-07, 2.3841858e-07)
 dash_cooldown = 1.0
 dash_bar = NodePath("../Dashbar")
 
-[node name="Healthbar" parent="." unique_id=357192755 instance=ExtResource("11_gymyn")]
+[node name="PlayerHealthComponent" type="Node" parent="." unique_id=2020830101]
+script = ExtResource("10_gymyn")
+
+[node name="Healthbar" parent="." unique_id=357192755 node_paths=PackedStringArray("health_component") instance=ExtResource("11_gymyn")]
 offset_left = -157.0
 offset_top = -88.0
 offset_right = 83.0
 offset_bottom = -84.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_pu2lt")
+health_component = NodePath("../PlayerHealthComponent")
 
 [node name="Dashbar" type="ProgressBar" parent="." unique_id=640335010]
 z_index = 1
@@ -183,6 +195,8 @@ max_value = 1.5
 value = 1.0
 show_percentage = false
 
-[node name="cooldown_timer" type="Timer" parent="." unique_id=782118174]
+[node name="dash_cooldown_timer" type="Timer" parent="." unique_id=782118174]
 wait_time = 4.0
 one_shot = true
+
+[node name="hurt_cooldown_timer" type="Timer" parent="." unique_id=780513655]

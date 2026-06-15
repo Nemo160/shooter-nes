@@ -14,19 +14,18 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(20, 31)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_po0sg"]
-size = Vector2(27, 34)
-
-[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("health_component", "gravity_component", "movement_component", "animation_component", "hitbox")]
+[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("health_component", "gravity_component", "movement_component", "animation_component")]
 z_index = 1
 collision_layer = 512
 collision_mask = 257
 script = ExtResource("1_1f0kj")
+patrol_direction = null
 health_component = NodePath("EnemyHealthComponent")
 gravity_component = NodePath("GravityComponent")
 movement_component = NodePath("EnemyMovementComponent")
 animation_component = NodePath("EnemyAnimationComponent")
-hitbox = NodePath("HitBox")
+move_speed = null
+damage = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1774789791]
 texture = ExtResource("1_hghv2")
@@ -39,12 +38,11 @@ shape = SubResource("RectangleShape2D_1f0kj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=796074234]
 
-[node name="Healthbar" parent="." unique_id=357192755 node_paths=PackedStringArray("health_component") instance=ExtResource("3_afpow")]
+[node name="Healthbar" parent="." unique_id=357192755 instance=ExtResource("3_afpow")]
 offset_left = -13.0
 offset_top = -21.0
 offset_right = 13.0
 offset_bottom = -18.0
-health_component = NodePath("../EnemyHealthComponent")
 
 [node name="StateMachine" parent="." unique_id=1811726916 node_paths=PackedStringArray("initial_state") instance=ExtResource("5_1dp5w")]
 initial_state = NodePath("Idle")
@@ -67,11 +65,3 @@ script = ExtResource("9_po0sg")
 
 [node name="EnemyHealthComponent" type="Node" parent="." unique_id=2075954037]
 script = ExtResource("10_po0sg")
-
-[node name="HitBox" type="Area2D" parent="." unique_id=1029690093]
-collision_layer = 512
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=153642174]
-position = Vector2(-0.5, 0)
-shape = SubResource("RectangleShape2D_po0sg")
-debug_color = Color(0.95686275, 0, 0, 0.41960785)

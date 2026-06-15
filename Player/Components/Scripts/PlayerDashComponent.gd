@@ -6,7 +6,7 @@ class_name PlayerDashComponent extends Node
 @export var dash_cooldown: float = 5.0
 @export var dash_bar: ProgressBar
 
-@onready var cooldown_timer: Timer = $"../cooldown_timer"
+@onready var cooldown_timer: Timer = $"../dash_cooldown_timer"
 
 var is_dashing: bool = false
 var dash_direction: float = 1.0

@@ -1,18 +1,39 @@
 class_name Player extends CharacterBody2D
-@export_category("Components")
+@export_subgroup("Components")
+@export var health_component: HealthComponent
 @export var gravity_component: GravityComponent
 @export var input_component: InputComponent
 @export var movement_component: MovementComponent
 @export var animation_component: AnimationComponent
 @export var jump_component: JumpComponent
 @export var dash_component: PlayerDashComponent
-
-@export_category("Player Settings")
-@export var health: float = 200
-@export var move_speed: float = 115
+@export_subgroup("Bars")
+@export var dash_bar: ProgressBar
+@export_subgroup("Settings")
+@export var damage_cooldown_timer: Timer
 
 var facing_direction: float = 1.0
 
+func _ready() -> void:
+	health_component.died.connect(_on_died)
+	damage_cooldown_timer.one_shot = true
+	
+	dash_bar.min_value = 0.0
+	dash_bar.max_value = 1.0
+	dash_bar.step = 0.0
+	dash_bar.visible = false
+
+func take_damage(amount: float) -> void:
+	if not damage_cooldown_timer.is_stopped():
+		return
+
+	health_component.take_damage(amount)
+	damage_cooldown_timer.start()
+	
+func _on_died() -> void:
+	print("PLAYER HAS DIED")
+	# death animation, respawn, game over screen, etc.
+	pass
 
 func _physics_process(delta: float) -> void:
 	input_component.update_input()
