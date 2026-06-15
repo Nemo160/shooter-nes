@@ -1,12 +1,12 @@
-class_name DashComponent extends Node
+class_name PlayerDashComponent extends Node
 
 @export_subgroup("Settings")
 @export var dash_duration: float = 0.18
 @export var dash_speed: float = 500
+@export var dash_cooldown: float = 5.0
 @export var dash_bar: ProgressBar
 
-
-@onready var cooldown_timer: Timer = $"../dash_cooldown"
+@onready var cooldown_timer: Timer = $"../cooldown_timer"
 
 var is_dashing: bool = false
 var dash_direction: float = 1.0
@@ -17,6 +17,7 @@ const INVINCIBLE_LAYER: int = 2
 const ENEMY_LAYER: int = 10
 
 func _ready() -> void:
+	cooldown_timer.wait_time = dash_cooldown
 	cooldown_timer.one_shot = true
 	dash_bar.min_value = 0.0
 	dash_bar.max_value = 1.0
@@ -56,7 +57,7 @@ func update_dash_cooldown_bar() -> void:
 	var progress := get_cooldown_progress()
 	dash_bar.value = progress
 	dash_bar.visible = progress < 1.0
-	
+
 func get_cooldown_progress() -> float:
 	if cooldown_timer.is_stopped():
 		return 1.0

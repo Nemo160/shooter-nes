@@ -1,13 +1,18 @@
 class_name Player extends CharacterBody2D
 @export_category("Components")
-@export_subgroup("Nodes")
 @export var gravity_component: GravityComponent
 @export var input_component: InputComponent
 @export var movement_component: MovementComponent
 @export var animation_component: AnimationComponent
 @export var jump_component: JumpComponent
-@export var dash_component: DashComponent
+@export var dash_component: PlayerDashComponent
+
+@export_category("Player Settings")
+@export var health: float = 200
+@export var move_speed: float = 115
+
 var facing_direction: float = 1.0
+
 
 func _physics_process(delta: float) -> void:
 	input_component.update_input()
@@ -21,7 +26,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	animation_component.update_animation(self, input_component.input_horizontal)
-	DebugLayer.update_player(self, dash_component.cooldown_timer.is_stopped(), jump_component.has_air_jumped)
+	#DebugLayer.update_player(self, true, jump_component.has_air_jumped)
 
 
 func update_facing_direction(input_horizontal: float) -> void:

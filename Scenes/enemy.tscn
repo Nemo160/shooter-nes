@@ -13,7 +13,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(20, 31)
 
-[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("gravity_component", "movement_component", "animation_component")]
+[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("gravity_component", "movement_component", "animation_component", "health_bar")]
 z_index = 1
 collision_layer = 512
 collision_mask = 257
@@ -21,6 +21,8 @@ script = ExtResource("1_1f0kj")
 gravity_component = NodePath("GravityComponent")
 movement_component = NodePath("EnemyMovementComponent")
 animation_component = NodePath("EnemyAnimationComponent")
+health_bar = NodePath("Healthbar")
+health = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1774789791]
 texture = ExtResource("1_hghv2")

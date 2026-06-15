@@ -2,6 +2,5 @@
 
 [ext_resource type="Script" uid="uid://ckd3fv0pdobjw" path="res://Player/Components/Scripts/PlayerDashComponent.gd" id="1_0685t"]
 
-[node name="DashComponent" type="Node" unique_id=220756344]
+[node name="PlayerDashComponent" type="Node" unique_id=220756344]
 script = ExtResource("1_0685t")
-dash_duration = null

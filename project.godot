@@ -27,6 +27,18 @@ window/size/viewport_height=360
 window/size/window_width_override=1280
 window/size/window_height_override=720
 
+[file_customization]
+
+folder_colors={
+"res://Assets/": "pink",
+"res://Components/": "yellow",
+"res://Core/": "orange",
+"res://Docs/": "yellow",
+"res://Enemy/": "red",
+"res://Player/": "blue",
+"res://Scenes/": "purple"
+}
+
 [input]
 
 up={

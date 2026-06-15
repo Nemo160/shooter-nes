@@ -11,7 +11,7 @@ func _ready() -> void:
 	
 
 # In DebugOverlay.gd
-func update_player(body: CharacterBody2D, dash_time_stopped: bool, air_jumped: bool) -> void:
+func update_player(body: CharacterBody2D,  air_jumped: bool, dash_time_stopped: bool = false) -> void:
 	label.text = "FPS: %d\nVelocity X: %.1f\nVelocity Y: %.1f\nDash ready: %s\nAir jumped: %s" % [
 		Engine.get_frames_per_second(),
 		body.velocity.x,
