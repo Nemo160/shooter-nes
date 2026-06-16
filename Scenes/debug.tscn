@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://l1k2srfnnder" path="res://Assets/mapsheet/Grass-01.png" id="2_axs6p"]
 [ext_resource type="PackedScene" uid="uid://cllho3etk60ya" path="res://Scenes/enemy.tscn" id="3_5k3ys"]
 [ext_resource type="AudioStream" uid="uid://dtk0ewk1dyipw" path="res://Assets/Audio/Lite spelkänsla till eddie.mp3" id="4_6fqrn"]
+[ext_resource type="AudioStream" uid="uid://mwe418w2g3x6" path="res://Assets/Audio/Enemy/Enemy Hit Sound.mp3" id="4_h47sb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5k3ys"]
 texture = ExtResource("2_axs6p")
@@ -543,6 +544,7 @@ tile_set = SubResource("TileSet_6fqrn")
 
 [node name="Enemy" parent="." unique_id=310943629 instance=ExtResource("3_5k3ys")]
 position = Vector2(100, -138)
+hurt_sound = ExtResource("4_h47sb")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1638107813]
 stream = ExtResource("4_6fqrn")
