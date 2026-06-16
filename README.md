@@ -34,7 +34,7 @@ recursive loop if you're not careful.
 
 ## Architecture Diagram
 
-![Architecture Diagram](Docs/class_diagram.png)
+![Architecture Diagram](Docs/class-diagram.png)
 
 _Note: `Player`/`Enemy` declare their component slots using the base types (e.g.
 `GravityComponent`), but the inspector actually assigns the `Player*`/`Enemy*` subclass —
