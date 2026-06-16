@@ -15,10 +15,15 @@ run/main_scene="uid://cjcdwd50t1s1x"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://docxn6dipfpit"
+
 [autoload]
 
 GameConstant="*uid://dkit23v45sn4b"
 DebugLayer="*uid://72pdmw377klu"
+SoundManager="*uid://yqh5c87c44t3"
 
 [display]
 
@@ -31,7 +36,6 @@ window/size/window_height_override=720
 
 folder_colors={
 "res://Assets/": "pink",
-"res://Components/": "yellow",
 "res://Core/": "orange",
 "res://Docs/": "yellow",
 "res://Enemy/": "red",

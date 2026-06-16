@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://yqh5c87c44t3"]
+
+[ext_resource type="Script" uid="uid://feerh0nanah7" path="res://Utils/Sound/SoundManager.gd" id="1_miidc"]
+
+[node name="SoundManager" type="Node2D" unique_id=2136463890]
+script = ExtResource("1_miidc")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1457010258]
+bus = &"SFX"
+
+[node name="ui_click" type="AudioStreamPlayer" parent="." unique_id=1205499071]
+bus = &"SFX"
+
+[node name="game_over" type="AudioStreamPlayer" parent="." unique_id=796216712]
+bus = &"SFX"

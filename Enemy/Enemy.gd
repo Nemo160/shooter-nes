@@ -5,11 +5,17 @@ class_name Enemy extends CharacterBody2D
 @export var gravity_component: GravityComponent
 @export var movement_component: MovementComponent
 @export var animation_component: AnimationComponent
-@export var hitbox: Area2D
+@export var audio_component: AudioComponent
 
-@export_subgroup("Settings")
+
+
+@export_category("Settings")
 @export var move_speed: float = 80.0
 @export var damage: float = 5
+@export var hitbox: Area2D
+@export_subgroup("Sound")
+@export_range(-40.0, 10.0, 0.5) var sound_volume_db: float = 0.0
+@export var hurt_sound: AudioStream
 
 var player: Node2D
 var bodies_in_hitbox: Array[Node2D] = []

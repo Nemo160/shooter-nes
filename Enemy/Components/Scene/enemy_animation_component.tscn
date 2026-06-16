@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bqe8anm4cv2x1"]
+
+[ext_resource type="Script" uid="uid://sms5s7o1b3hh" path="res://Enemy/Components/EnemyAnimationComponent.gd" id="1_anim"]
+
+[node name="EnemyAnimationComponent" type="Node"]
+script = ExtResource("1_anim")

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://chl5enm3jx7wb"]
+
+[ext_resource type="Script" uid="uid://cevkq0i26nx20" path="res://Core/Components/Scripts/HealthComponent.gd" id="1_hc"]
+[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/Scene/AudioComponent.tscn" id="2_ac"]
+[ext_resource type="PackedScene" uid="uid://bhb4enm8kq1vn" path="res://Enemy/Components/Scene/enemy_healthbar.tscn" id="3_ehb"]
+
+[node name="EnemyHealthComponent" type="Node"]
+script = ExtResource("1_hc")
+
+[node name="AudioComponent" parent="." instance=ExtResource("2_ac")]
+
+[node name="Healthbar" parent="." instance=ExtResource("3_ehb")]

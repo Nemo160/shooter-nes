@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dgr2enm6hw8tq"]
+
+[ext_resource type="Script" uid="uid://blwxopskmrkht" path="res://Enemy/Components/EnemyGravityComponent.gd" id="1_grav"]
+
+[node name="EnemyGravityComponent" type="Node"]
+script = ExtResource("1_grav")

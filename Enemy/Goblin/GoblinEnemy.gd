@@ -1,13 +1,14 @@
 class_name Goblin extends Enemy
-@export var hurt_sound: AudioStream
 
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@export var patrol_direction: float = -1.0
+##health, damage, and movespeed edited with inspector tool!
+#here we can place other logic perhaps...
+
 func _ready() -> void:
-	audio_player.stream = hurt_sound
+	# Run Enemy._ready() first so the hitbox signals, player lookup and
+	# death signal get wired up. Without this the goblin never damages the player.
+	super._ready()
+	audio_component.set_volume_db(sound_volume_db)
 
 func take_damage(amount: float) -> void:
 	health_component.take_damage(amount)
-	audio_player.play()
-@export var patrol_direction: float = -1.0
-##heatlh, damage, and movespeed edited with inspector tool! 
-#here we can place other logic perhaps...

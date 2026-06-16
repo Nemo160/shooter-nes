@@ -2,11 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://byrtmp8eiivjq" path="res://Assets/Player/gun.png" id="1_nxj5y"]
 [ext_resource type="Script" uid="uid://t8k1hctr5cwu" path="res://Player/Items/gun.gd" id="1_oqrbh"]
+[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/Scene/AudioComponent.tscn" id="3_k4teu"]
+[ext_resource type="AudioStream" uid="uid://couuh8lshoam1" path="res://Assets/Audio/Player/Pistol Fire.mp3" id="3_t6ynv"]
 
 [node name="Gun" type="Node2D" unique_id=1641854389]
 position = Vector2(-4.7683716e-07, -1.9073486e-06)
 scale = Vector2(0.06, 0.06)
 script = ExtResource("1_oqrbh")
+shoot_sound = ExtResource("3_t6ynv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=496898012]
 position = Vector2(116, -72)
@@ -23,6 +26,4 @@ one_shot = true
 wait_time = 4.0
 one_shot = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=342447720]
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=678893204]
+[node name="AudioComponent" parent="." unique_id=957418661 instance=ExtResource("3_k4teu")]

@@ -1,8 +1,9 @@
 class_name Gun extends Node2D
-
+@export_category("Sound")
 @export var shoot_sound: AudioStream
+@export_range(-40.0, 10.0, 0.5) var sound_volume_db: float = 0.0
+@onready var audio_component: AudioComponent = $AudioComponent
 
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var shoot_timer: Timer = $shoot_timer
 @onready var charge_timer: Timer = $charge_timer
 @onready var muzzle: Marker2D = $Marker2D
@@ -13,6 +14,9 @@ const BULLET = preload("res://Scenes/projectile.tscn")
 var direction: Vector2 = Vector2.ZERO
 
 
+func _ready() -> void:
+	audio_component.set_volume_db(sound_volume_db)
+	
 func _physics_process(delta: float) -> void:
 	look_at(get_global_mouse_position())
 
@@ -30,8 +34,8 @@ func shoot() -> void:
 	bullet_instance.global_position = muzzle.global_position
 	bullet_instance.global_rotation = global_rotation
 
-	audio_player.stream = shoot_sound
-	audio_player.play()
+	audio_component.play_sound(shoot_sound, true)
+
 
 	shoot_timer.start()
 
@@ -46,7 +50,7 @@ func charge_shoot() -> void:
 		bullet_instance.global_position = muzzle.global_position
 		bullet_instance.global_rotation = global_rotation + deg_to_rad(angle)
 
-	audio_player.stream = shoot_sound
-	audio_player.play()
+	audio_component.stream = shoot_sound
+	audio_component.play()
 
 	charge_timer.start()

@@ -7,6 +7,7 @@ class_name Player extends CharacterBody2D
 @export var animation_component: AnimationComponent
 @export var jump_component: JumpComponent
 @export var dash_component: PlayerDashComponent
+
 @export_subgroup("Bars")
 @export var dash_bar: ProgressBar
 @export_subgroup("Settings")
