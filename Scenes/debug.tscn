@@ -542,3 +542,6 @@ tile_set = SubResource("TileSet_6fqrn")
 
 [node name="Enemy" parent="." unique_id=310943629 instance=ExtResource("3_5k3ys")]
 position = Vector2(100, -138)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1638107813]
+autoplay = true
