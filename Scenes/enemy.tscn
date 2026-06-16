@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://be3yj3j3ud6gw" path="res://Enemy/Goblin/GoblinEnemy.gd" id="1_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://cf2ekfdsnt8t3" path="res://Assets/Enemy/goblin.png" id="1_hghv2"]
-[ext_resource type="AudioStream" uid="uid://dtk0ewk1dyipw" path="res://Assets/Audio/Lite spelkänsla till eddie.mp3" id="2_haro7"]
+[ext_resource type="AudioStream" uid="uid://dlp3y821mnqby" path="res://Assets/Audio/Enemy/Enemy Hit Sound.mp3" id="2_haro7"]
 [ext_resource type="PackedScene" uid="uid://dtbredpbyinhi" path="res://Components/Progressbars/healthbar.tscn" id="3_afpow"]
 [ext_resource type="PackedScene" uid="uid://crlrtdesf6cni" path="res://Core/StateMachine/state_machine.tscn" id="5_1dp5w"]
 [ext_resource type="Script" uid="uid://drcc5tsj24jux" path="res://Enemy/Goblin/States/GoblinIdleState.gd" id="5_ghaa6"]

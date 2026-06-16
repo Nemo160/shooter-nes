@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://p4opleavvq5c" path="res://Core/Player.gd" id="1_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://boufkgqabgybd" path="res://Assets/Player/block_character_test.png" id="1_v0iea"]
-[ext_resource type="AudioStream" uid="uid://dtk0ewk1dyipw" path="res://Assets/Audio/Lite spelkänsla till eddie.mp3" id="4_pu2lt"]
+[ext_resource type="AudioStream" uid="uid://1722wwoa2fdp" path="res://Assets/Audio/Player/Pistol Fire.mp3" id="4_7dp3o"]
+[ext_resource type="AudioStream" uid="uid://b2v5wk40le5xb" path="res://Assets/Audio/Player/Movement/Walk Sound.mp3" id="6_ukyrk"]
 [ext_resource type="PackedScene" uid="uid://qvmsikkd821w" path="res://Player/Components/animation_component.tscn" id="7_3smsa"]
 [ext_resource type="PackedScene" uid="uid://dbff3ohwuw7fa" path="res://Player/Components/gravity_component.tscn" id="7_8erm5"]
 [ext_resource type="PackedScene" uid="uid://ftui33xfe2p6" path="res://Player/Components/jump_component.tscn" id="8_8erm5"]
 [ext_resource type="PackedScene" uid="uid://dabfpehdklroo" path="res://Player/Components/dash_component.tscn" id="9_3p78x"]
 [ext_resource type="PackedScene" uid="uid://6bh1bi4427fw" path="res://Scenes/gun.tscn" id="9_f1ek2"]
+[ext_resource type="AudioStream" uid="uid://c4nmyc2bbvc3t" path="res://Assets/Audio/Player/Movement/Jump Sound.mp3" id="10_7dp3o"]
 [ext_resource type="Script" uid="uid://cevkq0i26nx20" path="res://Core/Components/HealthComponent.gd" id="10_gymyn"]
 [ext_resource type="PackedScene" uid="uid://dtbredpbyinhi" path="res://Components/Progressbars/healthbar.tscn" id="11_gymyn"]
 [ext_resource type="PackedScene" uid="uid://bwduqgcbpijgv" path="res://Player/Components/movement_component.tscn" id="12_pu2lt"]
@@ -158,18 +160,20 @@ position_smoothing_enabled = true
 
 [node name="Gun" parent="." unique_id=1641854389 instance=ExtResource("9_f1ek2")]
 position = Vector2(4.7683716e-07, 2.3841858e-07)
+shoot_sound = ExtResource("4_7dp3o")
 
 [node name="PlayerGravityComponent" parent="." unique_id=744426821 instance=ExtResource("7_8erm5")]
 
 [node name="PlayerMovementComponent" parent="." unique_id=661814169 instance=ExtResource("12_pu2lt")]
 move_speed = null
+walk_sound = ExtResource("6_ukyrk")
 
 [node name="PlayerInputComponent" parent="." unique_id=545915773 instance=ExtResource("13_ukyrk")]
 
 [node name="PlayerAnimationComponent" parent="." unique_id=521817328 instance=ExtResource("7_3smsa")]
 
 [node name="PlayerJumpComponent" parent="." unique_id=1611053512 instance=ExtResource("8_8erm5")]
-jump_sound = ExtResource("4_pu2lt")
+jump_sound = ExtResource("10_7dp3o")
 
 [node name="PlayerDashComponent" parent="." unique_id=220756344 node_paths=PackedStringArray("dash_bar") instance=ExtResource("9_3p78x")]
 dash_cooldown = 1.0
