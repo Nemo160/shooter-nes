@@ -2,7 +2,6 @@
 
 A 2D action prototype built in Godot. The focus so far has been on building solid player
 movement and enemy systems, not on visuals, which are intentionally not a priority yet.
-The diagrams used are made in mermaid.ai
 
 ## Tech stack
 
@@ -34,155 +33,7 @@ recursive loop if you're not careful.
 
 ## Architecture Diagram
 
-```mermaid
-classDiagram
-    class CharacterBody2D
-
-    class Player {
-        +float facing_direction
-        +take_damage(amount)
-    }
-    class Enemy {
-        +float move_speed
-        +float damage
-        +take_damage(amount)
-        +can_see_player() bool
-        +is_in_attack_range() bool
-    }
-    class Goblin {
-        +float patrol_direction
-    }
-    CharacterBody2D <|-- Player
-    CharacterBody2D <|-- Enemy
-    Enemy <|-- Goblin
-    Enemy ..> Player : detects (group lookup)
-
-    class HealthComponent {
-        +float max_health
-        +float health
-        +bool is_dead
-        +take_damage(amount)
-        +heal(amount)
-    }
-
-    class GravityComponent {
-        +float gravity
-        +bool is_falling
-        +handle_gravity(body, delta, is_descending)
-    }
-    class PlayerGravityComponent {
-        +float descend_multiplier
-    }
-    class EnemyGravityComponent {
-        +float testGr
-    }
-    GravityComponent <|-- PlayerGravityComponent
-    GravityComponent <|-- EnemyGravityComponent
-
-    class MovementComponent {
-        +handle_horizontal_movement(body, direction)
-    }
-    class PlayerMovementComponent {
-        +float move_speed
-    }
-    class EnemyMovementComponent {
-        +float move_speed
-    }
-    MovementComponent <|-- PlayerMovementComponent
-    MovementComponent <|-- EnemyMovementComponent
-
-    class JumpComponent {
-        +handle_jump(body, want_to_jump)
-    }
-    class PlayerJumpComponent {
-        +float jump_velocity
-        +float air_jump_multiplier
-        +bool is_jumping
-        +bool has_air_jumped
-    }
-    JumpComponent <|-- PlayerJumpComponent
-
-    class AnimationComponent {
-        +Sprite2D sprite
-        +AnimationPlayer animation_player
-        +play_animation(name)
-        +handle_horizontal_flip(direction)
-        +flip_towards_position(owner, target)
-    }
-    class PlayerAnimationComponent {
-        +update_animation(player, move_direction)
-    }
-    class EnemyAnimationComponent {
-        +play_idle()
-        +play_walk()
-        +play_attack()
-        +play_hurt()
-        +play_death()
-    }
-    AnimationComponent <|-- PlayerAnimationComponent
-    AnimationComponent <|-- EnemyAnimationComponent
-
-    class InputComponent {
-        +float input_horizontal
-        +bool jump_pressed
-        +bool jump_held
-        +bool dash_pressed
-        +bool holding_down
-        +update_input()
-    }
-
-    class PlayerDashComponent {
-        +float dash_duration
-        +float dash_speed
-        +float dash_cooldown
-        +bool is_dashing
-        +handle_dash(body, wants_to_dash, delta)
-        +start_dash(body)
-    }
-
-    Player *-- HealthComponent
-    Player *-- PlayerGravityComponent
-    Player *-- InputComponent
-    Player *-- PlayerMovementComponent
-    Player *-- PlayerAnimationComponent
-    Player *-- PlayerJumpComponent
-    Player *-- PlayerDashComponent
-
-    Enemy *-- HealthComponent
-    Enemy *-- EnemyGravityComponent
-    Enemy *-- EnemyMovementComponent
-    Enemy *-- EnemyAnimationComponent
-
-    class ProgressBar
-    class HealthBar {
-        +Timer timer
-        +ProgressBar damage_bar
-        +HealthComponent health_component
-        +float current_health
-        +init_health(health, max_health)
-    }
-    class PlayerHealthBar
-    class DashBar {
-        +float dash_duration
-        +float dash_value
-        +init_dash_bar(duration, max)
-    }
-    ProgressBar <|-- HealthBar
-    ProgressBar <|-- DashBar
-    HealthBar <|-- PlayerHealthBar
-    HealthBar ..> HealthComponent : listens (health_changed, died)
-
-    class Gun {
-        +Vector2 direction
-    }
-    class Projectile {
-        +float SPEED
-        +float damage_amount
-    }
-    Gun ..> Projectile : spawns
-    Projectile ..> Player : take_damage()
-    Projectile ..> Enemy : take_damage()
-```
+![Architecture Diagram](Docs/class_diagram.png)
 
 _Note: `Player`/`Enemy` declare their component slots using the base types (e.g.
 `GravityComponent`), but the inspector actually assigns the `Player*`/`Enemy*` subclass —
@@ -276,39 +127,7 @@ and switches between them based on signals.
   to a `chase_state` when it spots the player — but that chase state doesn't exist yet, so
   right now patrol never actually leaves patrol.
 
-```mermaid
-classDiagram
-    class State {
-        <<abstract>>
-        +enter_state()
-        +exit_state()
-        +update(delta)
-        +physics_update(delta)
-    }
-    class StateMachine {
-        +State initial_state
-        +State active_state
-        +Enemy enemy
-        +change_state(new_state)
-    }
-    class EnemyState {
-        +Enemy enemy
-        +setup(owner_enemy)
-    }
-    class GoblinIdleState {
-        +EnemyState patrol_state
-    }
-    class GoblinPatrolState {
-        +State chase_state
-        +float direction
-    }
-
-    State <|-- EnemyState
-    EnemyState <|-- GoblinIdleState
-    EnemyState <|-- GoblinPatrolState
-    StateMachine o-- State : manages children
-    StateMachine --> Enemy : drives
-```
+![State Machine Diagram](Docs/statemachine-class_diagram.png)
 
 ## Weapons
 
@@ -330,4 +149,4 @@ I've gone through a few different approaches while building this:
 State machines genuinely seem better suited for movement than the modular approach turned out
 to be, so the current plan is: state machines for enemies, and keep the simpler component
 setup for the player for as long as it holds up. This might turn out to be the wrong call, but
-it's the current direction lol.
+it's the current direction.
