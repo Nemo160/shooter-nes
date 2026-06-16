@@ -1,0 +1,31 @@
+classDiagram
+    class State {
+        <<abstract>>
+        +enter_state()
+        +exit_state()
+        +update(delta)
+        +physics_update(delta)
+    }
+    class StateMachine {
+        +State initial_state
+        +State active_state
+        +Enemy enemy
+        +change_state(new_state)
+    }
+    class EnemyState {
+        +Enemy enemy
+        +setup(owner_enemy)
+    }
+    class GoblinIdleState {
+        +EnemyState patrol_state
+    }
+    class GoblinPatrolState {
+        +State chase_state
+        +float direction
+    }
+
+    State <|-- EnemyState
+    EnemyState <|-- GoblinIdleState
+    EnemyState <|-- GoblinPatrolState
+    StateMachine o-- State : manages children
+    StateMachine --> Enemy : drives

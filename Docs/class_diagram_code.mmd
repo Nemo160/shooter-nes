@@ -1,36 +1,147 @@
 classDiagram
+    class CharacterBody2D
 
+    class Player {
+        +float facing_direction
+        +take_damage(amount)
+    }
+    class Enemy {
+        +float move_speed
+        +float damage
+        +take_damage(amount)
+        +can_see_player() bool
+        +is_in_attack_range() bool
+    }
+    class Goblin {
+        +float patrol_direction
+    }
     CharacterBody2D <|-- Player
     CharacterBody2D <|-- Enemy
     Enemy <|-- Goblin
+    Enemy ..> Player : detects (group lookup)
 
+    class HealthComponent {
+        +float max_health
+        +float health
+        +bool is_dead
+        +take_damage(amount)
+        +heal(amount)
+    }
+
+    class GravityComponent {
+        +float gravity
+        +bool is_falling
+        +handle_gravity(body, delta, is_descending)
+    }
+    class PlayerGravityComponent {
+        +float descend_multiplier
+    }
+    class EnemyGravityComponent {
+        +float testGr
+    }
     GravityComponent <|-- PlayerGravityComponent
     GravityComponent <|-- EnemyGravityComponent
 
-    AnimationComponent <|-- PlayerAnimationComponent
-    AnimationComponent <|-- EnemyAnimationComponent
-
+    class MovementComponent {
+        +handle_horizontal_movement(body, direction)
+    }
+    class PlayerMovementComponent {
+        +float move_speed
+    }
+    class EnemyMovementComponent {
+        +float move_speed
+    }
     MovementComponent <|-- PlayerMovementComponent
     MovementComponent <|-- EnemyMovementComponent
 
-    State <|-- EnemyState
+    class JumpComponent {
+        +handle_jump(body, want_to_jump)
+    }
+    class PlayerJumpComponent {
+        +float jump_velocity
+        +float air_jump_multiplier
+        +bool is_jumping
+        +bool has_air_jumped
+    }
+    JumpComponent <|-- PlayerJumpComponent
 
-    EnemyState <|-- GoblinIdleState
-    EnemyState <|-- GoblinPatrolState
-    EnemyState <|-- GoblinChaseState
-    EnemyState <|-- GoblinAttackState
+    class AnimationComponent {
+        +Sprite2D sprite
+        +AnimationPlayer animation_player
+        +play_animation(name)
+        +handle_horizontal_flip(direction)
+        +flip_towards_position(owner, target)
+    }
+    class PlayerAnimationComponent {
+        +update_animation(player, move_direction)
+    }
+    class EnemyAnimationComponent {
+        +play_idle()
+        +play_walk()
+        +play_attack()
+        +play_hurt()
+        +play_death()
+    }
+    AnimationComponent <|-- PlayerAnimationComponent
+    AnimationComponent <|-- EnemyAnimationComponent
 
-    Player --> PlayerGravityComponent
-    Player --> PlayerAnimationComponent
-    Player --> PlayerMovementComponent
-    Player --> PlayerDashComponent
-    Player --> PlayerInputComponent
-    Player --> PlayerJumpComponent
+    class InputComponent {
+        +float input_horizontal
+        +bool jump_pressed
+        +bool jump_held
+        +bool dash_pressed
+        +bool holding_down
+        +update_input()
+    }
 
-    Goblin --> EnemyGravityComponent
-    Goblin --> EnemyAnimationComponent
-    Goblin --> EnemyMovementComponent
-    Goblin --> StateMachine
+    class PlayerDashComponent {
+        +float dash_duration
+        +float dash_speed
+        +float dash_cooldown
+        +bool is_dashing
+        +handle_dash(body, wants_to_dash, delta)
+        +start_dash(body)
+    }
 
-    StateMachine --> State
-    EnemyState --> Enemy
+    Player *-- HealthComponent
+    Player *-- PlayerGravityComponent
+    Player *-- InputComponent
+    Player *-- PlayerMovementComponent
+    Player *-- PlayerAnimationComponent
+    Player *-- PlayerJumpComponent
+    Player *-- PlayerDashComponent
+
+    Enemy *-- HealthComponent
+    Enemy *-- EnemyGravityComponent
+    Enemy *-- EnemyMovementComponent
+    Enemy *-- EnemyAnimationComponent
+
+    class ProgressBar
+    class HealthBar {
+        +Timer timer
+        +ProgressBar damage_bar
+        +HealthComponent health_component
+        +float current_health
+        +init_health(health, max_health)
+    }
+    class PlayerHealthBar
+    class DashBar {
+        +float dash_duration
+        +float dash_value
+        +init_dash_bar(duration, max)
+    }
+    ProgressBar <|-- HealthBar
+    ProgressBar <|-- DashBar
+    HealthBar <|-- PlayerHealthBar
+    HealthBar ..> HealthComponent : listens (health_changed, died)
+
+    class Gun {
+        +Vector2 direction
+    }
+    class Projectile {
+        +float SPEED
+        +float damage_amount
+    }
+    Gun ..> Projectile : spawns
+    Projectile ..> Player : take_damage()
+    Projectile ..> Enemy : take_damage()
