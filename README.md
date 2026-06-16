@@ -2,6 +2,7 @@
 
 A 2D action prototype built in Godot. The focus so far has been on building solid player
 movement and enemy systems, not on visuals, which are intentionally not a priority yet.
+Class diagrams were created using mermaid.ai. Class relations etc, were written modified by me
 
 ## Tech stack
 
