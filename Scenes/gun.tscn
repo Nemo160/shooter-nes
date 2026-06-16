@@ -22,3 +22,7 @@ one_shot = true
 [node name="charge_timer" type="Timer" parent="." unique_id=2112695978]
 wait_time = 4.0
 one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=342447720]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=678893204]
