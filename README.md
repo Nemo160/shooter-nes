@@ -1,62 +1,112 @@
-# DEVOLOPMENT DOCUMENTATION
-## THOUGHTS
-I've been developing different systems for a game. I first started with scuffed movements since I knew nothing about game architecture. I later found out what state machines were and got into that. It was a headache but I got it running and developed a lot of features, however, it soon became very hard to maintain since a lot of the logic and important variables got eventually spread out through different states and it got very messy. This is why I decided to rebuild the state machine. However, after rebuilding the state machine and a few state I once again changed my mind and went the modular road.
+# NES Shooter (working title)
 
-This is a lot simpler but yet again i've realized that I might be stupid and stacked everything into states when developing the state machine. I could have divided the functionalites a lot better than I did. State machines are in fact a lot better when it comes to movement, so I decided that I would create state machines for the enemies and keep the simple components for the player movements as long as I can. I just know this is a huge mistake but fuck it we ball.
-# PLAYER MOVEMENT
-## Modular Components 
-This game handles player movement with modular components. The `Player` class functions as a middleman for each component. This class calls the engines physics functions every frame, which lets every component communicate and handle their respective input. Separating the functionallity in this manner improves the projects scaleability and code readability.
+A 2D action prototype built in Godot. The focus so far has been on building solid player
+movement and enemy systems, not on visuals, which are intentionally not a priority yet.
 
-Every component variable is exported to the inspector with the name "Nodes"
+## Tech stack
 
-**LATER NOTE**<br>
-Every component connect through Player, however, I've come to realize that this also means that every component has access to an instance of each component through player. This basically means that you can call GravityComponent variables and functions in JumpComponent. This works because the Player instance is passed to every component. **DO NOT** use this! I assume that the instance that is used when accessing variables this way could be outdated or even worse it could lead to a recursive black hole if not careful.
+Godot Engine, GDScript
+
+## Controls (current)
+
+- Move left / right
+- Jump (with air jump)
+- Dash (with a short invincibility window)
+- Hold down to fast-fall / descend faster
+
+## Player Movement — Modular Components
+
+Player movement is handled through modular components rather than one large script. The
+`Player` class acts as a middleman for each component: it calls the engine's physics functions
+every frame, which lets each component read input and act independently. Splitting the logic
+this way keeps the project easier to scale and read.
+
+Every component is exported to the inspector under the `Nodes` category.
+
+**Note on component access**<br>
+Every component connects through `Player`, which also means every component technically has
+access to every other component's variables and functions through that shared `Player`
+instance (e.g. calling `GravityComponent` logic from inside `JumpComponent`). **Avoid doing
+this** — the instance referenced this way can be stale, and in the worst case it risks a
+recursive loop if you're not careful.
+
 ## Class Diagram
 
 ![Class Diagram](Docs/class-diagram.png)
+
 ## Components
+
 ### 1. InputComponent
-This component handles the user inputs with a single function `update_input()` by setting the corresponding boolean to either true or false depening if their respective key has been pressed.
-```
-input_horizontal = Input.get_axi("left", "right")
+
+Handles user input through a single `update_input()` function, setting booleans based on
+whether the corresponding action is pressed:
+
+```gdscript
+input_horizontal = Input.get_axis("left", "right")
 jump_pressed = Input.is_action_just_pressed("jump")
 jump_held = Input.is_action_pressed("jump")
 dash_pressed = Input.is_action_just_pressed("dash")
 holding_down = Input.is_action_pressed("down")
 ```
-Input returns true if the key is being pressed. This is used to set the declared booleans. These booleans are later passed directly to other components .
+
+These booleans are passed directly to the other components that need them.
 
 ### 2. GravityComponent
-This handles the gravity by simply checking if the body that is being passed is on the floor and then adding suitable velocity. The gravity is a constant set in `GameConstant`.
 
-This component also handles descending speed by checking if the `down`key is being pressed (passed parameter).
+Applies gravity by checking whether the body is on the floor and adding the appropriate
+velocity. Gravity strength is a constant defined in `GameConstants`. Also handles a faster
+descent speed when the `down` key is held.
 
 ### 3. MovementComponent
-The movement horizontal movement is handled in the function `handle_horizontal_movement()`. The function uses the passed direction parameter to set the correct character velocity.
+
+Handles horizontal movement through `handle_horizontal_movement()`, using the passed direction
+parameter to set the character's velocity.
 
 ### 4. JumpComponent
-Not sure if this should be handled by the movement component, but I chose to make it a separate component incase anything else is added.
 
-`JumpComponent` handles jump and air jump by having a air jump multiplier and checking the `want_to_jump` boolean.
+Handles regular and air jumps using an air-jump multiplier and the `want_to_jump` boolean.
+Could arguably live inside `MovementComponent`, but kept separate in case more jump-related
+features get added later.
 
-## 5. DashComponent
-The dash functionality uses a timer for the cooldown and a simple float value for the dash duration, and speed. Duration and speed can be changed with the inspector tool in the dash node. The dash also gives the player an invincibility window that allows them to walk through enemies. 
+### 5. DashComponent
 
-The dash is handled by simply checking which direction the character is facing and accelerating them that direction and then starting a timer and invicibility window.
+Dash uses a timer for the cooldown plus simple float values for duration and speed, both
+adjustable from the inspector on the dash node. Dashing also grants a short invincibility
+window that lets the player pass through enemies.
 
-The invicibility functionality is done by disabling when the dash starts and enabling them again when the dash is done. 
-```
+The dash checks which direction the character is facing, accelerates them in that direction,
+then starts the cooldown timer and invincibility window:
+
+```gdscript
 body.set_collision_layer_value(PLAYER_LAYER, false)
 body.set_collision_layer_value(INVINCIBLE_LAYER, true)
 body.set_collision_mask_value(ENEMY_LAYER, false)
 ```
-Then the invers is done to end the invincibility window.
 
-## 6. AnimationComponent
-For this component to work you need to add the `AnimationPlayer`- and `Sprite2D`-node into the exported variables.
-This component plays animations and handles character flips.
+The same logic is reversed once the invincibility window ends.
 
-**NOTE**<br>
-This whole function could be improved by using the actual booleans to check if the player is on the ground or what not, instead of manually checking if player.is_on_floor. I could add `is_moving` variable to movement component and use that instead of input. However this kind of thinking is taking me back to a state machine GHAAAAAA (I wanted to avoid this)
+### 6. AnimationComponent
 
+Requires an `AnimationPlayer` and `Sprite2D` node assigned via the exported variables. Plays
+animations and handles character flipping.
 
+**Possible improvement**<br>
+Right now this checks things like `player.is_on_floor()` directly instead of relying on
+booleans from the other components. Adding something like an `is_moving` variable to
+`MovementComponent` and reading that instead of raw input would be cleaner — though that line
+of thinking pulls me right back toward a state machine, which is exactly what I was trying to
+avoid here.
+
+## Devlog / Design Notes
+
+I've gone through a few different approaches while building this:
+
+1. Started with rough, "scuffed" movement since I didn't know anything about game architecture yet.
+2. Learned about state machines and rebuilt movement around them. Got a lot of features working, but logic and important variables ended up spread across many different states, which became hard to maintain.
+3. Rebuilt the state machine, then changed direction again partway through and moved to a modular component approach instead.
+4. In hindsight, I leaned too hard into stuffing everything into states during the state-machine version — the functionality could have been split up better than it was.
+
+State machines genuinely seem better suited for movement than the modular approach turned out
+to be, so the current plan is: state machines for enemies, and keep the simpler component
+setup for the player for as long as it holds up. This might turn out to be the wrong call, but
+it's the current direction.
