@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://p4opleavvq5c" path="res://Core/Player.gd" id="1_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://boufkgqabgybd" path="res://Assets/Player/block_character_test.png" id="1_v0iea"]
+[ext_resource type="AudioStream" uid="uid://dtk0ewk1dyipw" path="res://Assets/Audio/Lite spelkänsla till eddie.mp3" id="4_pu2lt"]
 [ext_resource type="PackedScene" uid="uid://qvmsikkd821w" path="res://Player/Components/animation_component.tscn" id="7_3smsa"]
 [ext_resource type="PackedScene" uid="uid://dbff3ohwuw7fa" path="res://Player/Components/gravity_component.tscn" id="7_8erm5"]
 [ext_resource type="PackedScene" uid="uid://ftui33xfe2p6" path="res://Player/Components/jump_component.tscn" id="8_8erm5"]
@@ -161,12 +162,14 @@ position = Vector2(4.7683716e-07, 2.3841858e-07)
 [node name="PlayerGravityComponent" parent="." unique_id=744426821 instance=ExtResource("7_8erm5")]
 
 [node name="PlayerMovementComponent" parent="." unique_id=661814169 instance=ExtResource("12_pu2lt")]
+move_speed = null
 
 [node name="PlayerInputComponent" parent="." unique_id=545915773 instance=ExtResource("13_ukyrk")]
 
 [node name="PlayerAnimationComponent" parent="." unique_id=521817328 instance=ExtResource("7_3smsa")]
 
 [node name="PlayerJumpComponent" parent="." unique_id=1611053512 instance=ExtResource("8_8erm5")]
+jump_sound = ExtResource("4_pu2lt")
 
 [node name="PlayerDashComponent" parent="." unique_id=220756344 node_paths=PackedStringArray("dash_bar") instance=ExtResource("9_3p78x")]
 dash_cooldown = 1.0

@@ -28,6 +28,7 @@ func _physics_process(delta: float) -> void:
 
 func take_damage(amount: float) -> void:
 	health_component.take_damage(amount)
+	
 
 func _on_died() -> void:
 	queue_free()
