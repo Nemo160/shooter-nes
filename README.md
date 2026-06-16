@@ -25,6 +25,24 @@ this way keeps the project easier to scale and read.
 
 Every component is exported to the inspector under the `Nodes` category.
 
+**Component scenes & file layout**<br>
+Each component is a small scene (a `Node` + its script) that the `Player` or `Enemy` scene
+instances and assigns to an exported slot. The logic is split across three places:
+
+- `Core/Components/Scripts/` — base classes shared by everyone (`AnimationComponent`,
+  `MovementComponent`, `GravityComponent`, `JumpComponent`, `HealthComponent`,
+  `AudioComponent`). `Core/Components/Scene/` only holds scenes used as-is by both sides
+  (currently just `AudioComponent.tscn`).
+- `Player/Components/Scripts/` + `Player/Components/Scene/` — the player subclasses and their
+  `player_*_component.tscn` scenes.
+- `Enemy/Components/` + `Enemy/Components/Scene/` — the enemy subclasses and their
+  `enemy_*_component.tscn` scenes.
+
+A scene in Godot is bound to a single root script, so there's **one small scene per entity per
+component** rather than one shared scene with a swappable script. They share behaviour through
+the base classes above, which is what lets `Player`/`Enemy` type their slots against the base
+type while still getting the specialised behaviour.
+
 **Note on component access**<br>
 Every component connects through `Player`, which also means every component technically has
 access to every other component's variables and functions through that shared `Player`
@@ -111,6 +129,24 @@ variable to `MovementComponent` and reading that instead of raw input would be c
 that line of thinking pulls me right back toward a state machine, which is exactly what I was
 trying to avoid for the player.
 
+### 7. HealthComponent
+
+Shared by both `Player` and `Enemy` (same `HealthComponent` script, no subclass). Tracks
+`health`/`max_health`, exposes `take_damage()` and `heal()`, and emits `health_changed` and
+`died` signals that the health bar and the owning entity listen to. It plays a hurt sound
+through its own bundled `AudioComponent`.
+
+The two entities use **different health-component scenes** — `player_health_component.tscn` and
+`enemy_health_component.tscn` — so they can carry differently-styled health bars while reusing
+the same logic script.
+
+### 8. AudioComponent
+
+A thin wrapper around an `AudioStreamPlayer2D` (`play_sound()`, `stop()`, `is_playing()`,
+`set_volume_db()`). It's the one component used as-is by everyone, and several components
+(`HealthComponent`, `PlayerMovementComponent`, `PlayerJumpComponent`) bundle their own copy for
+their specific sound effects.
+
 ## Enemy AI — State Machine
 
 Enemies use a state machine instead of the modular component approach used for the player.
@@ -138,6 +174,17 @@ and switches between them based on signals.
   long as that body implements `take_damage()`. That's how the same projectile can damage both
   `Player` and `Enemy` without needing to know which one it hit.
 
+## UI Bars
+
+- `HealthBar` (extends `ProgressBar`) listens to its `HealthComponent`'s `health_changed` /
+  `died` signals and animates a delayed "damage" bar behind the main fill. Because the bar
+  lives under the `HealthComponent` — a plain `Node`, which breaks the 2D transform chain — it
+  sets `top_level` and follows its entity in world space every frame using an exported
+  `follow_offset`, instead of relying on Control anchors. Player and enemy point their health
+  scenes at differently-styled bars. _(For a fixed on-screen HUD instead, the bar would live on
+  a `CanvasLayer` rather than under the component.)_
+- `DashBar` is the player-only cooldown bar driven by `PlayerDashComponent`.
+
 ## Devlog / Design Notes
 
 I've gone through a few different approaches while building this:
@@ -146,8 +193,16 @@ I've gone through a few different approaches while building this:
 2. Learned about state machines and rebuilt movement around them. Got a lot of features working, but logic and important variables ended up spread across many different states, which became hard to maintain.
 3. Rebuilt the state machine, then changed direction again partway through and moved to a modular component approach instead.
 4. In hindsight, I leaned too hard into stuffing everything into states during the state-machine version — the functionality could have been split up better than it was.
+5. Cleaned up the component setup. While wiring enemies onto the same components as the player, I realised I'd baked the player-specific scripts straight into the "shared" component scenes, so the enemy was silently running player logic (and crashing on animation calls that only exist on the enemy variant). Reorganised everything into one small scene per entity per component, split the health component into separate player/enemy scenes with their own bars, and fixed two bugs along the way: the enemy never damaging the player (a `Goblin._ready()` that shadowed `Enemy._ready()` without `super`), and the health bars anchoring to the canvas instead of following their entity.
 
 State machines genuinely seem better suited for movement than the modular approach turned out
 to be, so the current plan is: state machines for enemies, and keep the simpler component
 setup for the player for as long as it holds up. This might turn out to be the wrong call, but
 it's the current direction.
+
+On that last cleanup: most of the day went into actually understanding what was broken —
+tracing the bugs, working out *why* the enemy was running player code, and deciding how I
+wanted the components reorganised. Once I knew the plan, the refactor itself was mostly
+mechanical busywork (moving scenes, rewiring references, splitting the health component) that
+would've cost me another full day by hand. I handed that part to an AI coding agent and it was
+done in minutes — the thinking was mine, the grunt work wasn't.

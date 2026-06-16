@@ -1,13 +1,18 @@
 classDiagram
+    %% ============ ENTITIES ============
     class CharacterBody2D
 
     class Player {
         +float facing_direction
         +take_damage(amount)
+        +update_facing_direction(input_horizontal)
     }
     class Enemy {
         +float move_speed
         +float damage
+        +Area2D hitbox
+        +Node2D player
+        +Array bodies_in_hitbox
         +take_damage(amount)
         +can_see_player() bool
         +is_in_attack_range() bool
@@ -20,13 +25,24 @@ classDiagram
     Enemy <|-- Goblin
     Enemy ..> Player : detects (group lookup)
 
+    %% ============ SHARED LOGIC COMPONENTS ============
+    class AudioComponent {
+        +AudioStreamPlayer2D audio_player
+        +set_volume_db(db)
+        +play_sound(sound, random_pitch)
+        +stop()
+        +is_playing() bool
+    }
+
     class HealthComponent {
         +float max_health
         +float health
         +bool is_dead
+        +AudioComponent audio_component
         +take_damage(amount)
         +heal(amount)
     }
+    HealthComponent *-- AudioComponent
 
     class GravityComponent {
         +float gravity
@@ -47,12 +63,14 @@ classDiagram
     }
     class PlayerMovementComponent {
         +float move_speed
+        +AudioComponent audio_component
     }
     class EnemyMovementComponent {
         +float move_speed
     }
     MovementComponent <|-- PlayerMovementComponent
     MovementComponent <|-- EnemyMovementComponent
+    PlayerMovementComponent *-- AudioComponent
 
     class JumpComponent {
         +handle_jump(body, want_to_jump)
@@ -62,8 +80,10 @@ classDiagram
         +float air_jump_multiplier
         +bool is_jumping
         +bool has_air_jumped
+        +AudioComponent audio_component
     }
     JumpComponent <|-- PlayerJumpComponent
+    PlayerJumpComponent *-- AudioComponent
 
     class AnimationComponent {
         +Sprite2D sprite
@@ -103,6 +123,7 @@ classDiagram
         +start_dash(body)
     }
 
+    %% ============ COMPOSITION: PLAYER ============
     Player *-- HealthComponent
     Player *-- PlayerGravityComponent
     Player *-- InputComponent
@@ -111,18 +132,24 @@ classDiagram
     Player *-- PlayerJumpComponent
     Player *-- PlayerDashComponent
 
+    %% ============ COMPOSITION: ENEMY ============
     Enemy *-- HealthComponent
     Enemy *-- EnemyGravityComponent
     Enemy *-- EnemyMovementComponent
     Enemy *-- EnemyAnimationComponent
+    Enemy *-- AudioComponent
 
+    %% ============ UI / BARS ============
     class ProgressBar
     class HealthBar {
-        +Timer timer
-        +ProgressBar damage_bar
+        +Vector2 follow_offset
         +HealthComponent health_component
+        +ProgressBar damage_bar
+        +Timer timer
+        +Node2D entity
         +float current_health
         +init_health(health, max_health)
+        +_process(delta)
     }
     class PlayerHealthBar
     class DashBar {
@@ -133,8 +160,11 @@ classDiagram
     ProgressBar <|-- HealthBar
     ProgressBar <|-- DashBar
     HealthBar <|-- PlayerHealthBar
+    HealthComponent *-- HealthBar : bundled in health scene
     HealthBar ..> HealthComponent : listens (health_changed, died)
+    HealthBar ..> CharacterBody2D : follows in world space
 
+    %% ============ WEAPONS ============
     class Gun {
         +Vector2 direction
     }
