@@ -551,3 +551,4 @@ stream = ExtResource("4_6fqrn")
 [node name="Spawner" parent="." unique_id=535689705 instance=ExtResource("6_quvyc")]
 position = Vector2(114, -56)
 enemy_scene = ExtResource("3_5k3ys")
+respawn_cooldown_time = 5.0

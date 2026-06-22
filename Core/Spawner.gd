@@ -27,12 +27,20 @@ var _current_enemy: Enemy = null
 var _ready_to_respawn: bool = true
 var _is_on_screen: bool = false
 
+# Editor preview of the assigned enemy (drawn at this spawner while editing).
+const PREVIEW_MODULATE := Color(1.0, 1.0, 1.0, 0.5)
+var _preview_texture: Texture2D = null
+var _preview_region: Rect2 = Rect2()
+var _preview_offset: Vector2 = Vector2.ZERO
+var _preview_centered: bool = true
+
 @onready var respawn_timer: Timer = $RespawnTimer
 @onready var visibility_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
+		_update_preview()
 		return
 
 	_spawn_manager = Global.game_manager.spawn_manager
@@ -52,7 +60,7 @@ func set_enemy_scene(value: PackedScene) -> void:
 	if not Engine.is_editor_hint():
 		return
 
-	#add editor preview logic here. LATER.
+	_update_preview()
 
 
 func _try_spawn() -> bool:
@@ -156,3 +164,68 @@ func _on_enemy_left_scene() -> void:
 
 		RespawnType.ON_DEAD:
 			_prepare_for_respawn()
+
+
+##THIS PART WAS ADDED USING AI. Just a useful tool while creating the game
+# --- Editor preview -------------------------------------------------------
+# Caches the assigned enemy's sprite (first frame) so _draw() can show it in
+# the editor. Runs only in the editor; at runtime the real enemy is spawned.
+
+func _update_preview() -> void:
+	_preview_texture = null
+
+	if enemy_scene != null:
+		# Instantiate without adding to the tree: no _ready/_process runs, so
+		# this is a cheap, side-effect-free way to read the enemy's sprite.
+		var instance: Node = enemy_scene.instantiate()
+		var sprite: Sprite2D = _find_sprite(instance)
+
+		if sprite != null and sprite.texture != null:
+			_preview_texture = sprite.texture
+			_preview_region = _frame_region(sprite)
+			_preview_offset = sprite.offset
+			_preview_centered = sprite.centered
+
+		instance.free()
+
+	queue_redraw()
+
+
+func _find_sprite(node: Node) -> Sprite2D:
+	if node is Sprite2D:
+		return node as Sprite2D
+
+	for child in node.get_children():
+		var found: Sprite2D = _find_sprite(child)
+		if found != null:
+			return found
+
+	return null
+
+
+func _frame_region(sprite: Sprite2D) -> Rect2:
+	if sprite.region_enabled:
+		return sprite.region_rect
+
+	var texture_size: Vector2 = sprite.texture.get_size()
+	var columns: int = maxi(sprite.hframes, 1)
+	var rows: int = maxi(sprite.vframes, 1)
+	var cell: Vector2 = Vector2(texture_size.x / columns, texture_size.y / rows)
+
+	return Rect2(Vector2(sprite.frame_coords) * cell, cell)
+
+
+func _draw() -> void:
+	if not Engine.is_editor_hint() or _preview_texture == null:
+		return
+
+	var top_left: Vector2 = _preview_offset
+	if _preview_centered:
+		top_left -= _preview_region.size * 0.5
+
+	draw_texture_rect_region(
+		_preview_texture,
+		Rect2(top_left, _preview_region.size),
+		_preview_region,
+		PREVIEW_MODULATE
+	)
