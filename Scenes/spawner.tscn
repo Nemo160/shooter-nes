@@ -4,8 +4,6 @@
 
 [node name="Spawner" type="Marker2D" unique_id=535689705]
 script = ExtResource("1_2bop2")
-dont_spawn = null
-can_respawn = null
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=405980123]
 

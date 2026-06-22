@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://byrtmp8eiivjq" path="res://Assets/Player/gun.png" id="1_nxj5y"]
 [ext_resource type="Script" uid="uid://t8k1hctr5cwu" path="res://Player/Items/gun.gd" id="1_oqrbh"]
-[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/Scene/AudioComponent.tscn" id="3_k4teu"]
+[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/AudioComponent.tscn" id="3_k4teu"]
 [ext_resource type="AudioStream" uid="uid://couuh8lshoam1" path="res://Assets/Audio/Player/Pistol Fire.mp3" id="3_t6ynv"]
 
 [node name="Gun" type="Node2D" unique_id=1641854389]

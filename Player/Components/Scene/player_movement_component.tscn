@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bwduqgcbpijgv"]
 
 [ext_resource type="Script" uid="uid://d4lvoqm6f8nb2" path="res://Player/Components/Scripts/PlayerMovementComponent.gd" id="1_6i0a7"]
-[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/Scene/AudioComponent.tscn" id="2_ly6vm"]
+[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/AudioComponent.tscn" id="2_ly6vm"]
 
 [node name="PlayerMovementComponent" type="Node" unique_id=661814169]
 script = ExtResource("1_6i0a7")

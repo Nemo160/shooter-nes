@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ci2c7aebkpwnt"]
+
+[ext_resource type="Script" uid="uid://lj2nysrsta7y" path="res://Core/Managers/GameManager.gd" id="1_rjcw1"]
+[ext_resource type="Script" uid="uid://ddl04bxeoy3b4" path="res://Core/Managers/SpawnManager.gd" id="2_y10nc"]
+[ext_resource type="Script" uid="uid://7ftrt0p5kicv" path="res://Core/Managers/LevelManager.gd" id="3_vwchc"]
+[ext_resource type="Script" uid="uid://cjrhmgrdmkp5j" path="res://Core/Managers/ScoreManager.gd" id="4_db0fk"]
+
+[node name="GameManager" type="Node" unique_id=342268801]
+script = ExtResource("1_rjcw1")
+
+[node name="SpawnManager" type="Node" parent="." unique_id=313869431]
+script = ExtResource("2_y10nc")
+
+[node name="LevelManager" type="Node" parent="." unique_id=200284288]
+script = ExtResource("3_vwchc")
+
+[node name="ScoreManager" type="Node" parent="." unique_id=738301851]
+script = ExtResource("4_db0fk")

@@ -1,6 +1,7 @@
 class_name StateMachine extends Node
 
-@export var initial_state: State
+@onready var initial_state: State = $Idle
+
 
 var active_state: State
 var enemy: Enemy

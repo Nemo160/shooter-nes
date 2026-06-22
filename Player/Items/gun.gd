@@ -50,7 +50,9 @@ func charge_shoot() -> void:
 		bullet_instance.global_position = muzzle.global_position
 		bullet_instance.global_rotation = global_rotation + deg_to_rad(angle)
 
-	audio_component.stream = shoot_sound
-	audio_component.play()
+	audio_component.play_sound(shoot_sound, true)
+
+
+	shoot_timer.start()
 
 	charge_timer.start()

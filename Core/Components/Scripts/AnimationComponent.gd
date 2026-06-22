@@ -8,10 +8,15 @@ class_name AnimationComponent extends Node
 func play_animation(animation_name: StringName) -> void:
 	if animation_player == null:
 		return
-	
+
+	# Skip silently if the animation isn't authored yet, so callers don't
+	# need to guard and we don't spam "animation not found" errors.
+	if not animation_player.has_animation(animation_name):
+		return
+
 	if animation_player.current_animation == animation_name:
 		return
-	
+
 	animation_player.play(animation_name)
 
 

@@ -2,15 +2,15 @@
 
 [ext_resource type="Script" uid="uid://be3yj3j3ud6gw" path="res://Enemy/Goblin/GoblinEnemy.gd" id="1_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://cf2ekfdsnt8t3" path="res://Assets/Enemy/goblin.png" id="1_hghv2"]
-[ext_resource type="AudioStream" uid="uid://mwe418w2g3x6" path="res://Assets/Audio/Enemy/Enemy Hit Sound.mp3" id="2_haro7"]
 [ext_resource type="PackedScene" uid="uid://crlrtdesf6cni" path="res://Core/StateMachine/state_machine.tscn" id="5_1dp5w"]
 [ext_resource type="Script" uid="uid://drcc5tsj24jux" path="res://Enemy/Goblin/States/GoblinIdleState.gd" id="5_ghaa6"]
 [ext_resource type="Script" uid="uid://38yqrqhfndq4" path="res://Enemy/Goblin/States/GoblinPatrolState.gd" id="6_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://bqe8anm4cv2x1" path="res://Enemy/Components/Scene/enemy_animation_component.tscn" id="7_haro7"]
-[ext_resource type="PackedScene" uid="uid://cmv7enm9pd3kr" path="res://Enemy/Components/Scene/enemy_movement_component.tscn" id="8_56vhr"]
+[ext_resource type="PackedScene" uid="uid://cmv7ennapd3kr" path="res://Enemy/Components/Scene/enemy_movement_component.tscn" id="8_56vhr"]
 [ext_resource type="PackedScene" uid="uid://dgr2enm6hw8tq" path="res://Enemy/Components/Scene/enemy_gravity_component.tscn" id="9_ta2yt"]
 [ext_resource type="PackedScene" uid="uid://chl5enm3jx7wb" path="res://Enemy/Components/Scene/enemy_health_component.tscn" id="10_m4x7e"]
-[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/Scene/AudioComponent.tscn" id="12_56vhr"]
+[ext_resource type="PackedScene" uid="uid://bbtcun7pgwh3c" path="res://Core/Components/AudioComponent.tscn" id="12_56vhr"]
+[ext_resource type="Script" uid="uid://cg7chaseaq2xk" path="res://Enemy/Goblin/States/GoblinChaseState.gd" id="13_chase"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(20, 31)
@@ -18,18 +18,19 @@ size = Vector2(20, 31)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_po0sg"]
 size = Vector2(27, 34)
 
-[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("health_component", "gravity_component", "movement_component", "animation_component", "audio_component", "hitbox")]
+[node name="Enemy" type="CharacterBody2D" unique_id=310943629 node_paths=PackedStringArray("floor_ray", "wall_ray", "health_component", "gravity_component", "movement_component", "animation_component", "audio_component", "hitbox")]
 z_index = 1
 collision_layer = 512
 collision_mask = 257
 script = ExtResource("1_1f0kj")
+floor_ray = NodePath("Floor_RayCast2D")
+wall_ray = NodePath("Wall_RayCast2D")
 health_component = NodePath("HealthComponent")
 gravity_component = NodePath("GravityComponent")
 movement_component = NodePath("MovementComponent")
 animation_component = NodePath("AnimationComponent")
 audio_component = NodePath("AudioComponent")
 hitbox = NodePath("HitBox")
-hurt_sound = ExtResource("2_haro7")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1774789791]
 texture = ExtResource("1_hghv2")
@@ -42,17 +43,24 @@ shape = SubResource("RectangleShape2D_1f0kj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=796074234]
 
-[node name="StateMachine" parent="." unique_id=1811726916 node_paths=PackedStringArray("initial_state") instance=ExtResource("5_1dp5w")]
-initial_state = NodePath("Idle")
+[node name="StateMachine" parent="." unique_id=1811726916 instance=ExtResource("5_1dp5w")]
 
-[node name="Idle" type="Node" parent="StateMachine" unique_id=828225231 node_paths=PackedStringArray("patrol_state")]
+[node name="Idle" type="Node" parent="StateMachine" unique_id=828225231 node_paths=PackedStringArray("patrol_state", "chase_state")]
 script = ExtResource("5_ghaa6")
 patrol_state = NodePath("../Patrol")
+chase_state = NodePath("../Chase")
 
-[node name="Patrol" type="Node" parent="StateMachine" unique_id=369396832]
+[node name="Patrol" type="Node" parent="StateMachine" unique_id=369396832 node_paths=PackedStringArray("chase_state")]
 script = ExtResource("6_1dp5w")
+chase_state = NodePath("../Chase")
 
-[node name="AnimationComponent" parent="." unique_id=521817328 instance=ExtResource("7_haro7")]
+[node name="Chase" type="Node" parent="StateMachine" unique_id=1874437208 node_paths=PackedStringArray("patrol_state")]
+script = ExtResource("13_chase")
+patrol_state = NodePath("../Patrol")
+
+[node name="AnimationComponent" parent="." unique_id=521817328 node_paths=PackedStringArray("sprite", "animation_player") instance=ExtResource("7_haro7")]
+sprite = NodePath("../Sprite2D")
+animation_player = NodePath("../AnimationPlayer")
 
 [node name="MovementComponent" parent="." unique_id=661814169 instance=ExtResource("8_56vhr")]
 
@@ -69,3 +77,11 @@ shape = SubResource("RectangleShape2D_po0sg")
 debug_color = Color(0.95686275, 0, 0, 0.41960785)
 
 [node name="AudioComponent" parent="." unique_id=957418661 instance=ExtResource("12_56vhr")]
+
+[node name="Floor_RayCast2D" type="RayCast2D" parent="." unique_id=1806500124]
+position = Vector2(8, 4)
+target_position = Vector2(0, 20)
+collision_mask = 256
+
+[node name="Wall_RayCast2D" type="RayCast2D" parent="." unique_id=2128951865]
+target_position = Vector2(-60, 0)

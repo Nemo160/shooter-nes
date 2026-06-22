@@ -24,6 +24,7 @@ buses/default_bus_layout="uid://docxn6dipfpit"
 GameConstant="*uid://dkit23v45sn4b"
 DebugLayer="*uid://72pdmw377klu"
 SoundManager="*uid://yqh5c87c44t3"
+Global="*uid://bxoy54r73qjxa"
 
 [display]
 
